@@ -1,0 +1,210 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usepackage{xparse}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
+\usetikzlibrary{shapes.geometric}
+
+\renewcommand{\familydefault}{\rmdefault}
+
+% Define a custom command for the hexagonal icon
+\newcommand{\hexicon}[2]{%
+  \smash{% Tells LaTeX to ignore the vertical height of the icon
+    \begin{tikzpicture}[baseline={([yshift=-0.6ex]char.center)}]
+    \node[
+      draw=#1,
+      fill=white,
+      shape=regular polygon,
+      regular polygon sides=6,
+      inner sep=-1.0pt,
+      minimum size=0.9cm,
+      line width=1.5pt
+    ] (char) {\color{#1}\large#2};
+    \end{tikzpicture}%
+  }%
+}
+
+\definecolor{cvDarkgray}{gray}{0.2}    % Define colors for the classic grey theme
+\definecolor{cvBlue}{HTML}{1A5276}     % Steel Blue: Strong, corporate, and clean.
+\definecolor{cvTeal}{HTML}{0E6251}     % Deep Sea: Modern, sophisticated, and easy on the eyes.
+\definecolor{cvMidnight}{HTML}{212F3D} % Midnight Blue: Very dark, looks almost black until compared.
+
+\definecolor{cvPurple}{HTML}{4A235A}   % Royal Plum: Excellent contrast with cvDarkgray text.
+\definecolor{cvBurgundy}{HTML}{641E16} % Oxblood: Serious and authoritative, prints very well.
+\definecolor{cvIndigo}{HTML}{283593}   % Academic Indigo: Slightly more vibrant than Steel Blue.
+\definecolor{cvBronze}{HTML}{784212}   % Burned Umber: Distinctive, warm, and professional.
+
+% Custom CV Section Command
+% Usage: \cvsection{Color}{Icon}{Title}
+\NewDocumentCommand{\cvsection}{ m m m }{%
+  \vspace{3ex}
+  \noindent
+  \begin{minipage}[c]{1.0cm}
+    \centering \hexicon{#1}{#2} % Passes the color and icon to your updated hexicon
+  \end{minipage}%
+  \begin{minipage}[c]{\dimexpr\linewidth-1.0cm\relax}
+    {\Large\bfseries\color{cvDarkgray}\hspace{1.1ex}#3}\par
+    \vspace{-1.6ex}
+    \color{#1!70}\rule{\linewidth}{1.5pt}% Uses the passed color at 70% opacity for the line
+  \end{minipage}%
+  \par\vspace{1.5ex}
+}
+
+% Custom CV entry command
+\newcommand{\cventry}[5]{%
+  \noindent
+  \begin{minipage}[t]{3.5cm}
+  \vspace{0pt}\textcolor{cvDarkgray}{\textbf{#1}}
+  \end{minipage}%
+  \begin{minipage}[t]{\dimexpr\linewidth-3.5cm\relax}
+  \vspace{0pt}\textbf{#2}\ifx&#3&\else, #3\fi\ifx&#4&\else, \textit{#4}\fi\par
+  \ifx&#5&\else \vspace{0.1cm} #5 \fi
+  \end{minipage}\par\vspace{0.4cm}
+}
+
+% Custom CV item command
+\newcommand{\cvitem}[2]{%
+  \noindent
+  \begin{minipage}[t]{3.5cm}
+  \vspace{0pt}\textcolor{cvDarkgray}{\textbf{#1}}
+  \end{minipage}%
+  \begin{minipage}[t]{\dimexpr\linewidth-3.5cm\relax}
+  \vspace{0pt}#2
+  \end{minipage}\par\vspace{0.2cm}
+}
+
+% Remove page numbers
+\pagestyle{empty}
+
+\begin{document} % -----------------------------------------------------------------------------------------------------
+
+% Header Information
+  {\Huge\bfseries\textcolor{cvDarkgray}{Oscar Anghammar}}\\[0.5cm]
+  \hexicon{cvDarkgray}{\faEnvelope} \hspace{2pt} oscar.anghammar@gmail.com\\[0.3cm]
+  \hexicon{cvDarkgray}{\faGithub} \hspace{2pt} github.com/Anghammar\\
+  \vspace{0.5cm}
+
+  \cvsection{cvPurple}{\Large\textbf{$\genfrac{}{}{0pt}{2.0pt}{\text{TL;}}{\text{DR}}$}}{Summary}
+  \noindent Mathematician and Software Engineer with a Master's degree in pure mathematics
+  and eight years of professional experience in the fintech sector working with automated trading.
+  Proven track record of developing probability models and executing GPU-accelerated Monte Carlo simulations
+  in production environments.
+  \vspace{0.5cm}
+
+  \cvsection{cvBlue}{\faGraduationCap}{Education}
+  \cvitem{2015--2017}{Various university courses; mainly graduate-level courses in mathematics.}
+  \cventry{2013--2015}{Master of Mathematics}{The University of Gothenburg}{}{
+    Specialized in pure mathematics.
+  }
+  \cventry{2010--2013}{Bachelor of Mathematics}{The University of Gothenburg}{}{
+    Specialized in pure mathematics.
+  }
+
+  \cvsection{cvBronze}{\textbf{G\hspace{-1.0pt}r}\small\hspace{-1.7pt}$_k$}{Master's Thesis}
+  \cvitem{Title}{\emph{de Rham Cohomology for Grassmann and Flag Manifolds}}
+  \cvitem{Supervisors}{Genkai Zhang}
+  \cvitem{Description}{
+    This thesis studies both singular- and de Rham cohomologies for the Grassmannian,
+    and compares these two constructions. It also briefly explores Schubert calculus
+    and a possible generalization of Horn's conjecture.
+  }
+
+  \cvsection{cvTeal}{\faComment}{Languages}
+  \cvitem{Swedish}{First language}
+  \cvitem{English}{Proficient}
+
+  \newpage
+  \cvsection{cvMidnight}{\faBriefcase}{Experience}
+  \cventry{2018--2026}{Mathematician / Software Engineer}{Likeligood AB}{Stockholm}{
+    Fintech company developing a robot for semi-automated trading, mainly targeting sports betting.
+    \begin{itemize}
+      \item {
+        \textbf{Engineered end-to-end probability models} for live soccer betting,
+        owning the full pipeline from data scraping and cleansing to predictive modeling, rigorous testing,
+        live-data calibration, and statistical analysis of model performance.
+      }
+      \item {
+        \textbf{Architected a generalized modeling framework} to scale the system for multi-sport implementation,
+        establishing the foundational architecture for basketball and integrating the existing tennis model.
+      }
+      \item {
+        \textbf{Developed full-stack system features},
+        building intuitive UI elements to seamlessly control and monitor live data filtering and model parameters.
+      }
+      \item \textbf{Designed and deployed} an automated cryptocurrency trading robot from the ground up.
+      \item {
+        \textbf{Managed critical system operations}, executing software upgrades,
+        resolving malfunctions during live trading, and acting as technical liaison for system operators.
+      }
+      \item {
+        \textbf{Contributed to team expansion} by driving the hiring and onboarding process for new engineering talent.
+      }
+      \item {
+        \textbf{Technical Environment:}
+        \begin{itemize}
+          \item \emph{Generalized} Markov chain models via GPU-accelerated Monte Carlo simulations.
+          \item Data analysis and production architecture primarily in Scala and MATLAB, alongside TypeScript and GLSL.
+          \item Libraries used include Circe, Pekko, Apache Commons Math, protobuf, and ReactJS.
+        \end{itemize}
+      }
+    \end{itemize}
+  }
+  \cventry{2017--2018}{Mathematician}{Pentech Ltd}{Remote}{
+    Developed and implemented asset allocation algorithms for pension funds.
+    Analyzed financial data and built prototypes in MATLAB, with production implementation in C\#.
+  }
+  \cventry{2011--2017}{Teaching Assistant}{Chalmers University of Technology}{Gothenburg}{
+    Led exercise sessions for undergraduate courses, mainly in calculus and linear algebra.
+    Instructed MATLAB-based computer exercises,
+    and mentored students in the "Sommarmatte" preparatory mathematics course.
+  }
+
+  \newpage
+  \cvsection{cvBurgundy}{\faCode}{Programming}
+  \cventry{Scala}{Professional Experience}{}{}{
+    Eight years of professional experience in a mixed functional and object-oriented style,
+    operating independently of overarching frameworks. Currently my preferred programming language.
+  }
+  \cventry{MATLAB}{Professional Experience}{}{}{
+    Used extensively since 2011, primarily for numerical tasks and linear algebra.
+    Former preferred language prior to transitioning to Scala.
+  }
+  \cventry{C\#}{Prior Professional Experience}{}{}{
+    Ten months of professional experience developing production algorithms at Pentech.
+  }
+  \cventry{Java}{Working Knowledge}{}{}{
+    Strong familiarity with the JVM and integrating Java libraries within Scala applications.
+    Academic background combined with practical experience debugging enterprise Java codebases at Likeligood.
+  }
+  \cventry{Python}{Working Knowledge}{}{}{
+    Maintained various local Python environments for deploying generative AI models.
+    Experience includes refactoring AI-generated code, implementing bug fixes,
+    and adding features to local branches of existing AI projects.
+  }
+  \cventry{JavaScript}{Working Knowledge}{}{}{
+    Maintained data scrapers and resolved UI bugs within existing frontend frameworks at Likeligood.
+  }
+
+  \cvsection{cvIndigo}{\LARGE$\mathbb{R}$}{Technical Proficiencies}
+  \cvitem{Mathematics}{
+    Strong foundation in probability modeling, including Markov chains, Monte Carlo simulations, and Kalman filtering.
+    Extensive academic background in linear/multilinear algebra, abstract algebra, real/complex analysis, and topology.
+  }
+  \cvitem{AI/ML}{
+    Experienced in local model deployment and inference using ROCm and PyTorch.
+    Proficient in maintaining and optimizing environments for recent generative AI architectures.
+  }
+  \cvitem{OS}{Windows, macOS, Linux}
+  \cvitem{Tools}{Git, IntelliJ, SBT, \LaTeX}
+  \cvitem{Other merits}{Driving license B}
+
+
+\end{document} % -------------------------------------------------------------------------------------------------------

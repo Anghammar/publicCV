@@ -1,30 +1,41 @@
 name: Compile CV
 
-# This tells GitHub to run the action every time you push to the main branch
 on:
   push:
     branches:
-      - main # Change to 'master' if your default branch is still named master
+      - main # Change to 'master' if your default branch is named master
 
 jobs:
   build_pdf:
     runs-on: ubuntu-latest
     
+    # REQUIRED: Grants the action permission to create a release
+    permissions:
+      contents: write 
+
     steps:
-      # 1. Grabs your repository's files and puts them on the server
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Uses a popular, pre-built LaTeX environment to compile your document
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
           root_file: OscarAnghammarCV.tex
-          # compiler: lualatex # Uncomment this line if you ever want to switch from pdflatex
 
-      # 3. Takes the finished PDF and saves it so you can download it
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: compiled-cv
           path: OscarAnghammarCV.pdf
+
+      # Creates or updates a release tagged "latest" with your new PDF
+      - name: Update Latest Release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          replacesArtifacts: true
+          artifacts: "OscarAnghammarCV.pdf"
+          name: "Latest CV"
+          tag: "latest"
+          body: "Automatically compiled PDF of my CV."
+          token: ${{ secrets.GITHUB_TOKEN }}

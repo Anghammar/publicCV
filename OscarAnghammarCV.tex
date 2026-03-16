@@ -10,6 +10,8 @@
 \usepackage{xparse}
 \usepackage{amsfonts}
 \usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage[style=iso]{datetime2}
 
 \usetikzlibrary{shapes.geometric}
 
@@ -82,7 +84,11 @@
 }
 
 % Remove page numbers
-\pagestyle{empty}
+% Header and Footer setup
+\pagestyle{fancy}
+\fancyhf{} % Clear all default headers and footers
+\renewcommand{\headrulewidth}{0pt} % Remove the default decorative line under the header
+\rhead{\textcolor{lightgray}{\small \today}} % Right-aligned header
 
 \begin{document} % -----------------------------------------------------------------------------------------------------
 

@@ -12,6 +12,9 @@
 \usepackage{amsmath}
 \usepackage{fancyhdr}
 \usepackage[style=iso]{datetime2}
+\usepackage{url}
+
+\setlength{\headheight}{13.6pt}
 
 \usetikzlibrary{shapes.geometric}
 
@@ -35,6 +38,8 @@
 }
 
 \definecolor{cvDarkgray}{gray}{0.2}    % Define colors for the classic grey theme
+
+\definecolor{cvGreen}{HTML}{006400}    % Dark Green
 \definecolor{cvBlue}{HTML}{1A5276}     % Steel Blue: Strong, corporate, and clean.
 \definecolor{cvTeal}{HTML}{0E6251}     % Deep Sea: Modern, sophisticated, and easy on the eyes.
 \definecolor{cvMidnight}{HTML}{212F3D} % Midnight Blue: Very dark, looks almost black until compared.
@@ -92,11 +97,24 @@
 
 \begin{document} % -----------------------------------------------------------------------------------------------------
 
-% Header Information
+% Header Information (Separated into completely isolated text and graphics columns)
   {\Huge\bfseries\textcolor{cvDarkgray}{Oscar Anghammar}}\\[0.5cm]
-  \hexicon{cvDarkgray}{\faEnvelope} \hspace{2pt} oscar@anghammar.com\\[0.3cm]
-  \hexicon{cvDarkgray}{\faDesktop} \hspace{2pt} https://anghammar.com/\\[0.3cm]
-  \hexicon{cvDarkgray}{\faGithub} \hspace{2pt} github.com/Anghammar\\
+  \noindent
+  \begin{minipage}[t]{1.2cm}
+    %\centering
+    \hexicon{cvDarkgray}{\faEnvelope}\\[0.3cm]
+    \hexicon{cvDarkgray}{\faDesktop}\\[0.3cm]
+    \hexicon{cvDarkgray}{\faGithub}\\[0.3cm]
+    \hexicon{cvDarkgray}{\LARGE\textbf{\$}}
+  \end{minipage}% <-- The percent sign here is crucial; it prevents an accidental space token
+  \hspace{3pt}%
+  \begin{minipage}[t]{\dimexpr\linewidth-1.2cm-3pt\relax}% <-- Subtract the exact same spacing here
+    \url{oscar@anghammar.com}\\[0.3cm]
+    \url{https://anghammar.com}\\[0.3cm]
+    \url{https://github.com/Anghammar}\\[0.3cm]
+    \textbf{Anghammar konsult AB}\\
+    Organisationsnummer: 559509-3542
+  \end{minipage}
   \vspace{0.5cm}
 
   \cvsection{cvPurple}{\Large\textbf{$\genfrac{}{}{0pt}{2.0pt}{\text{TL;}}{\text{DR}}$}}{Summary}
@@ -210,8 +228,16 @@
     Proficient in maintaining and optimizing environments for recent generative AI architectures.
   }
   \cvitem{OS}{Windows, macOS, Linux}
-  \cvitem{Tools}{Git, IntelliJ, SBT, \LaTeX}
+  \cvitem{Tools}{Git, IntelliJ, SBT, \LaTeX, ComfyUI, llama.cpp}
   \cvitem{Other merits}{Driving license B}
+
+  \cvsection{cvGreen}{\faEdit}{Projects}
+  \cvitem{Wiki Harness\\Racing}{
+    A zero-backend, browser-based benchmarking harness for local LLMs,
+    running automated Wikiraces with real-time speed metrics, mistakes tracking, and path comparison visualizations.
+    \\[0.1cm]
+    \url{https://harness.anghammar.com}
+  }
 
 
 \end{document} % -------------------------------------------------------------------------------------------------------

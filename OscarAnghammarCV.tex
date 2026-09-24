@@ -52,6 +52,7 @@
 % Custom CV Section Command
 % Usage: \cvsection{Color}{Icon}{Title}
 \NewDocumentCommand{\cvsection}{ m m m }{%
+  \par\ifdim\dimexpr\pagegoal-\pagetotal\relax<8\baselineskip\newpage\fi% Never leave a heading alone at the bottom of a page
   \vspace{3ex}
   \noindent
   \begin{minipage}[c]{1.0cm}
@@ -95,92 +96,74 @@
 \renewcommand{\headrulewidth}{0pt} % Remove the default decorative line under the header
 \rhead{\textcolor{lightgray}{\small \today}} % Right-aligned header
 
+% Contact header: two columns, each an icon column beside a text column.
+% Usage: \contactcolumn{Width}{Icons}{Texts}, one row per icon, rows separated by \\[0.3cm]
+% The width is fixed in \contactw first: inside the outer minipage \linewidth is already the column's.
+\newlength{\contactw}
+\newcommand{\contactcolumn}[3]{%
+  \setlength{\contactw}{#1}%
+  \begin{minipage}[t]{\contactw}%
+    \begin{minipage}[t]{1.2cm}#2\end{minipage}% <-- The percent sign prevents an accidental space token
+    \hspace{3pt}%
+    \begin{minipage}[t]{\dimexpr\contactw-1.2cm-3pt\relax}#3\end{minipage}%
+  \end{minipage}%
+}
+
+% The public contact details. A private variant is built locally by defining \privatecontact as the
+% path of a file that redefines these macros (and fills the right-hand column); that file is never
+% part of this repository.
+\newcommand{\cvemail}{\url{oscar@anghammar.com}}
+\newcommand{\cvrighticons}{}
+\newcommand{\cvrighttexts}{}
+\ifdefined\privatecontact \input{\privatecontact}\fi
+
 \begin{document} % -----------------------------------------------------------------------------------------------------
 
-% Header Information (Separated into completely isolated text and graphics columns)
+% Header Information
   {\Huge\bfseries\textcolor{cvDarkgray}{Oscar Anghammar}}\\[0.5cm]
   \noindent
-  \begin{minipage}[t]{1.2cm}
-    %\centering
+  \contactcolumn{0.45\linewidth}{%
     \hexicon{cvDarkgray}{\faEnvelope}\\[0.3cm]
     \hexicon{cvDarkgray}{\faDesktop}\\[0.3cm]
     \hexicon{cvDarkgray}{\faGithub}\\[0.3cm]
-    \hexicon{cvDarkgray}{\LARGE\textbf{\$}}
-  \end{minipage}% <-- The percent sign here is crucial; it prevents an accidental space token
-  \hspace{3pt}%
-  \begin{minipage}[t]{\dimexpr\linewidth-1.2cm-3pt\relax}% <-- Subtract the exact same spacing here
-    \url{oscar@anghammar.com}\\[0.3cm]
+    \hexicon{cvDarkgray}{\LARGE\textbf{\$}}%
+  }{%
+    \cvemail\\[0.3cm]
     \url{https://anghammar.com}\\[0.3cm]
     \url{https://github.com/Anghammar}\\[0.3cm]
     \textbf{Anghammar konsult AB}\\
-    Organisationsnummer: 559509-3542
-  \end{minipage}
-  \vspace{0.5cm}
+    Org.\ no.\ 559509-3542%
+  }%
+  \contactcolumn{0.55\linewidth}{\cvrighticons}{\cvrighttexts}%
+  \par\vspace{0.5cm}
 
   \cvsection{cvPurple}{\Large\textbf{$\genfrac{}{}{0pt}{2.0pt}{\text{TL;}}{\text{DR}}$}}{Summary}
-  \noindent Mathematician and Software Engineer with a Master's degree in pure mathematics
-  and eight years of professional experience in the fintech sector working with automated trading.
-  Proven track record of developing probability models and executing GPU-accelerated Monte Carlo simulations
-  in production environments.
+  \noindent Mathematician and software engineer with a Master's degree in pure mathematics
+  and eight years in fintech, building probability models and GPU-accelerated Monte Carlo simulations
+  for automated trading in production. Since 2026 running my own company, Anghammar konsult AB,
+  working on reinforcement learning, LLM-driven development workflows and serverless mobile apps.
   \vspace{0.5cm}
 
-  \cvsection{cvBlue}{\faGraduationCap}{Education}
-  \cvitem{2015--2017}{Various university courses; mainly graduate-level courses in mathematics.}
-  \cventry{2013--2015}{Master of Mathematics}{The University of Gothenburg}{}{
-    Specialized in pure mathematics.
-  }
-  \cventry{2010--2013}{Bachelor of Mathematics}{The University of Gothenburg}{}{
-    Specialized in pure mathematics.
-  }
-
-  \cvsection{cvBronze}{\textbf{G\hspace{-1.0pt}r}\small\hspace{-1.7pt}$_k$}{Master's Thesis}
-  \cvitem{Title}{\emph{de Rham Cohomology for Grassmann and Flag Manifolds}}
-  \cvitem{Supervisors}{Genkai Zhang}
-  \cvitem{Description}{
-    This thesis studies both singular- and de Rham cohomologies for the Grassmannian,
-    and compares these two constructions. It also briefly explores Schubert calculus
-    and a possible generalization of Horn's conjecture.
-  }
-
-  \cvsection{cvTeal}{\faComment}{Languages}
-  \cvitem{Swedish}{First language}
-  \cvitem{English}{Proficient}
-
-  \newpage
   \cvsection{cvMidnight}{\faBriefcase}{Experience}
+  \cventry{2026--}{Founder / Consultant}{Anghammar konsult AB}{Stockholm}{
+    Independent software development and consulting, working with LLM coding agents.
+    Own projects: Robostrat, KnotNet and Wiki Harness Racing (see Projects).
+  }
   \cventry{2018--2026}{Mathematician / Software Engineer}{Likeligood AB}{Stockholm}{
-    Fintech company developing a robot for semi-automated trading, mainly targeting sports betting.
-    \begin{itemize}
-      \item {
-        \textbf{Engineered end-to-end probability models} for live soccer betting,
-        owning the full pipeline from data scraping and cleansing to predictive modeling, rigorous testing,
-        live-data calibration, and statistical analysis of model performance.
-      }
-      \item {
-        \textbf{Architected a generalized modeling framework} to scale the system for multi-sport implementation,
-        establishing the foundational architecture for basketball and integrating the existing tennis model.
-      }
-      \item {
-        \textbf{Developed full-stack system features},
-        building intuitive UI elements to seamlessly control and monitor live data filtering and model parameters.
-      }
-      \item \textbf{Designed and deployed} an automated cryptocurrency trading robot from the ground up.
-      \item {
-        \textbf{Managed critical system operations}, executing software upgrades,
-        resolving malfunctions during live trading, and acting as technical liaison for system operators.
-      }
-      \item {
-        \textbf{Contributed to team expansion} by driving the hiring and onboarding process for new engineering talent.
-      }
-      \item {
-        \textbf{Technical Environment:}
-        \begin{itemize}
-          \item \emph{Generalized} Markov chain models via GPU-accelerated Monte Carlo simulations.
-          \item Data analysis and production architecture primarily in Scala and MATLAB, alongside TypeScript and GLSL.
-          \item Libraries used include Circe, Pekko, Apache Commons Math, protobuf, and ReactJS.
-        \end{itemize}
-      }
+    Fintech company developing a robot for semi-automated trading, mainly in sports betting.
+    \begin{itemize}\setlength{\itemsep}{1pt}
+      \item \textbf{Built end-to-end probability models} for live soccer betting, from data scraping
+        and cleansing to modeling, testing, live calibration and analysis of model performance.
+      \item \textbf{Generalized the modeling framework} to more sports: laid the foundation for
+        basketball and integrated the existing tennis model.
+      \item \textbf{Designed and deployed} an automated cryptocurrency trading robot.
+      \item \textbf{Ran live operations}: software upgrades, fixing malfunctions during live trading,
+        and technical contact for the system operators. Built the UI for controlling and monitoring
+        live data filtering and model parameters.
+      \item \textbf{Led the recruitment and onboarding} of a junior engineer.
     \end{itemize}
+    \textbf{Technologies:} Markov chain models via GPU-accelerated Monte Carlo simulation;
+    Scala and MATLAB, alongside TypeScript and GLSL; Circe, Pekko, Apache Commons Math, protobuf and React.
   }
   \cventry{2017--2018}{Mathematician}{Pentech Ltd}{Remote}{
     Developed and implemented asset allocation algorithms for pension funds.
@@ -189,33 +172,60 @@
   \cventry{2011--2017}{Teaching Assistant}{Chalmers University of Technology}{Gothenburg}{
     Led exercise sessions for undergraduate courses, mainly in calculus and linear algebra.
     Instructed MATLAB-based computer exercises,
-    and mentored students in the "Sommarmatte" preparatory mathematics course.
+    and mentored students in the ``Sommarmatte'' preparatory mathematics course.
   }
 
-  \newpage
+  \cvsection{cvGreen}{\faEdit}{Projects}
+  \cvitem{Robostrat}{
+    A turn-based strategy game developed alongside its own AI, as a testbed for an AI training workflow
+    that transfers to other turn-based strategy games. The bot is trained by self-play reinforcement learning
+    (PyTorch on ROCm) and plays in the browser via ONNX.
+    Language models do engineering work in the workflow and play against the bot as scouts.
+    \\[0.1cm]
+    \url{https://anghammar.com/robostrat/}
+  }
+  \cvitem{KnotNet}{
+    A serverless social network for iOS and Android, in public beta. Phones sync posts and messages
+    directly over Bluetooth LE and relay them for each other (store-and-forward), with no servers and no internet.
+    Native apps in Swift and Kotlin, a gossip sync protocol with signed identities and end-to-end encrypted DMs,
+    and a hardware-in-the-loop test harness that drives real phones over USB.
+    \\[0.1cm]
+    \url{https://anghammar.com/knotnet/}
+  }
+  \cvitem{Wiki Harness\\Racing}{
+    A zero-backend, browser-based benchmarking harness for local LLMs,
+    running automated Wikiraces with real-time speed metrics, mistakes tracking, and path comparison visualizations.
+    \\[0.1cm]
+    \url{https://harness.anghammar.com}
+  }
+
   \cvsection{cvBurgundy}{\faCode}{Programming}
-  \cventry{Scala}{Professional Experience}{}{}{
+  \cvitem{Scala}{\textbf{Professional experience.}
     Eight years of professional experience in a mixed functional and object-oriented style,
     operating independently of overarching frameworks. Currently my preferred programming language.
   }
-  \cventry{MATLAB}{Professional Experience}{}{}{
+  \cvitem{MATLAB}{\textbf{Professional experience.}
     Used extensively since 2011, primarily for numerical tasks and linear algebra.
     Former preferred language prior to transitioning to Scala.
   }
-  \cventry{C\#}{Prior Professional Experience}{}{}{
+  \cvitem{C\#}{\textbf{Prior professional experience.}
     Ten months of professional experience developing production algorithms at Pentech.
   }
-  \cventry{Java}{Working Knowledge}{}{}{
+  \cvitem{Java}{\textbf{Working knowledge.}
     Strong familiarity with the JVM and integrating Java libraries within Scala applications.
     Academic background combined with practical experience debugging enterprise Java codebases at Likeligood.
   }
-  \cventry{Python}{Working Knowledge}{}{}{
-    Maintained various local Python environments for deploying generative AI models.
-    Experience includes refactoring AI-generated code, implementing bug fixes,
-    and adding features to local branches of existing AI projects.
+  \cvitem{TypeScript}{\textbf{Working knowledge.}
+    Maintained data scrapers and fixed UI bugs in an existing JavaScript frontend at Likeligood.
+    Robostrat's game engine and browser client are TypeScript, written with coding agents.
   }
-  \cventry{JavaScript}{Working Knowledge}{}{}{
-    Maintained data scrapers and resolved UI bugs within existing frontend frameworks at Likeligood.
+  \cvitem{Python}{\textbf{Working knowledge.}
+    Worked in existing codebases, including local branches of open-source generative AI projects.
+    Robostrat's reinforcement learning stack (PyTorch) is Python, written with coding agents.
+  }
+  \cvitem{Kotlin, Swift}{\textbf{With coding agents.}
+    KnotNet's native Android (Kotlin, Jetpack Compose) and iOS (Swift, SwiftUI) apps are written with
+    coding agents. Kotlin reads naturally coming from Scala.
   }
 
   \cvsection{cvIndigo}{\LARGE$\mathbb{R}$}{Technical Proficiencies}
@@ -224,20 +234,32 @@
     Extensive academic background in linear/multilinear algebra, abstract algebra, real/complex analysis, and topology.
   }
   \cvitem{AI/ML}{
-    Experienced in local model deployment and inference using ROCm and PyTorch.
-    Proficient in maintaining and optimizing environments for recent generative AI architectures.
+    Reinforcement learning (PPO self-play) with PyTorch on ROCm, from training to measuring model strength;
+    ONNX export for in-browser inference; local LLM deployment (llama.cpp) and LLM agents with tool use (MCP).
   }
   \cvitem{OS}{Windows, macOS, Linux}
-  \cvitem{Tools}{Git, IntelliJ, SBT, \LaTeX, ComfyUI, llama.cpp}
+  \cvitem{Tools}{Git, IntelliJ, SBT, \LaTeX, Claude Code, llama.cpp, ComfyUI}
+  \cvitem{Languages}{Swedish (first language), English (proficient)}
   \cvitem{Other merits}{Driving license B}
 
-  \cvsection{cvGreen}{\faEdit}{Projects}
-  \cvitem{Wiki Harness\\Racing}{
-    A zero-backend, browser-based benchmarking harness for local LLMs,
-    running automated Wikiraces with real-time speed metrics, mistakes tracking, and path comparison visualizations.
-    \\[0.1cm]
-    \url{https://harness.anghammar.com}
+  \cvsection{cvBlue}{\faGraduationCap}{Education}
+  \cvitem{2015--2017}{Various university courses; mainly graduate-level courses in mathematics.}
+  \cventry{2013--2015}{Degree of Master of Science with a major in Mathematics}{}{}{
+    University of Gothenburg
   }
+  \cventry{2010--2013}{Degree of Bachelor of Science with a major in Mathematics}{}{}{
+    University of Gothenburg
+  }
+
+  \cvsection{cvBronze}{\textbf{G\hspace{-1.0pt}r}\small\hspace{-1.7pt}$_k$}{Master's Thesis}
+  \cvitem{Title}{\emph{de Rham Cohomology for Grassmann and Flag Manifolds}}
+  \cvitem{Supervisor}{Genkai Zhang}
+  \cvitem{Description}{
+    This thesis studies both singular- and de Rham cohomologies for the Grassmannian,
+    and compares these two constructions. It also briefly explores Schubert calculus
+    and a possible generalization of Horn's conjecture.
+  }
+
 
 
 \end{document} % -------------------------------------------------------------------------------------------------------

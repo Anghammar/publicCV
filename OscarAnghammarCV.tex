@@ -147,7 +147,7 @@
   \cvsection{cvMidnight}{\faBriefcase}{Experience}
   \cventry{2026--}{Founder / Consultant}{Anghammar konsult AB}{Stockholm}{
     Independent software development and consulting, working with LLM coding agents.
-    Own projects: Robostrat, KnotNet and Wiki Harness Racing (see Projects).
+    Own projects: Robostrat, KnotNet, Wiki Harness Racing and Pröjsa (see Projects).
   }
   \cventry{2018--2026}{Mathematician / Software Engineer}{Likeligood AB}{Stockholm}{
     Fintech company developing a robot for semi-automated trading, mainly in sports betting.
@@ -158,8 +158,8 @@
         basketball and integrated the existing tennis model.
       \item \textbf{Designed and deployed} an automated cryptocurrency trading robot.
       \item \textbf{Ran live operations}: software upgrades, fixing malfunctions during live trading,
-        and technical contact for the system operators. Built the UI for controlling and monitoring
-        live data filtering and model parameters.
+        and technical contact for the system operators. Contributed to the UI by designing the parts
+        for controlling and monitoring live data filtering and model parameters.
       \item \textbf{Led the recruitment and onboarding} of a junior engineer.
     \end{itemize}
     \textbf{Technologies:} Markov chain models via GPU-accelerated Monte Carlo simulation;
@@ -178,14 +178,14 @@
   \cvsection{cvGreen}{\faEdit}{Projects}
   \cvitem{Robostrat}{
     A turn-based strategy game developed alongside its own AI, as a testbed for an AI training workflow
-    that transfers to other turn-based strategy games. The bot is trained by self-play reinforcement learning
+    intended to carry over to other turn-based strategy games. The bot is trained by self-play reinforcement learning
     (PyTorch on ROCm) and plays in the browser via ONNX.
     Language models do engineering work in the workflow and play against the bot as scouts.
     \\[0.1cm]
     \url{https://anghammar.com/robostrat/}
   }
   \cvitem{KnotNet}{
-    A serverless social network for iOS and Android, in public beta. Phones sync posts and messages
+    An experimental serverless messaging app for iOS and Android, in public beta. Phones sync posts and messages
     directly over Bluetooth LE and relay them for each other (store-and-forward), with no servers and no internet.
     Native apps in Swift and Kotlin, a gossip sync protocol with signed identities and end-to-end encrypted DMs,
     and a hardware-in-the-loop test harness that drives real phones over USB.
@@ -197,6 +197,14 @@
     running automated Wikiraces with real-time speed metrics, mistakes tracking, and path comparison visualizations.
     \\[0.1cm]
     \url{https://harness.anghammar.com}
+  }
+  \cvitem{Pröjsa}{
+    A web app for splitting the restaurant bill. The user's own AI assistant (Gemini, Claude or ChatGPT,
+    set up once with Pröjsa's instructions) reads the photo of the receipt and returns a link; everyone at the table
+    taps what they had and pays their share with Swish, amount filled in.
+    Pröjsa never sees the receipt image, has no accounts and no tracking, and keeps a split for at most a week.
+    \\[0.1cm]
+    \url{https://projsa.anghammar.com}
   }
 
   \cvsection{cvBurgundy}{\faCode}{Programming}
@@ -235,7 +243,7 @@
   }
   \cvitem{AI/ML}{
     Reinforcement learning (PPO self-play) with PyTorch on ROCm, from training to measuring model strength;
-    ONNX export for in-browser inference; local LLM deployment (llama.cpp) and LLM agents with tool use (MCP).
+    ONNX export for in-browser inference; local LLM and VLM deployment (llama.cpp) and LLM agents with tool use (MCP).
   }
   \cvitem{OS}{Windows, macOS, Linux}
   \cvitem{Tools}{Git, IntelliJ, SBT, \LaTeX, Claude Code, llama.cpp, ComfyUI}

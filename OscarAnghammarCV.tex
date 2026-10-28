@@ -1,8 +1,9 @@
-\documentclass[11pt, a4paper]{article}
+\documentclass[10pt, a4paper]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[margin=2.5cm]{geometry}
+% headsep keeps the date in the header close to the name, well clear of the page edge
+\usepackage[left=2.0cm, right=2.0cm, top=1.9cm, bottom=1.6cm, headsep=0.5cm]{geometry}
 \usepackage{titlesec}
 \usepackage{xcolor}
 \usepackage{fontawesome5}
@@ -13,12 +14,17 @@
 \usepackage{fancyhdr}
 \usepackage[style=iso]{datetime2}
 \usepackage{url}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref} % clickable links; load last
 
 \setlength{\headheight}{13.6pt}
 
 \usetikzlibrary{shapes.geometric}
 
 \renewcommand{\familydefault}{\rmdefault}
+
+% Product names are never split across lines
+\hyphenation{Antigravity ComfyUI ChatGPT Likeligood Robostrat Pentech}
 
 % Define a custom command for the hexagonal icon
 \newcommand{\hexicon}[2]{%
@@ -30,9 +36,9 @@
       shape=regular polygon,
       regular polygon sides=6,
       inner sep=-1.0pt,
-      minimum size=0.9cm,
-      line width=1.5pt
-    ] (char) {\color{#1}\large#2};
+      minimum size=0.75cm,
+      line width=1.4pt
+    ] (char) {\color{#1}\normalsize#2};
     \end{tikzpicture}%
   }%
 }
@@ -49,52 +55,56 @@
 \definecolor{cvIndigo}{HTML}{283593}   % Academic Indigo: Slightly more vibrant than Steel Blue.
 \definecolor{cvBronze}{HTML}{784212}   % Burned Umber: Distinctive, warm, and professional.
 
+% Every hexagon sits centered in a column of \hexcolw, and its text starts \hexgap after that column,
+% so the contact rows line up with the section headings.
+\newlength{\hexcolw}\setlength{\hexcolw}{1.0cm}
+\newlength{\hexgap}\setlength{\hexgap}{0.24cm}
+
 % Custom CV Section Command
 % Usage: \cvsection{Color}{Icon}{Title}
 \NewDocumentCommand{\cvsection}{ m m m }{%
-  \par\ifdim\dimexpr\pagegoal-\pagetotal\relax<8\baselineskip\newpage\fi% Never leave a heading alone at the bottom of a page
-  \vspace{3ex}
+  \par% The \nobreak below keeps a heading on the same page as its first entry
+  \vspace{2.2ex}
   \noindent
-  \begin{minipage}[c]{1.0cm}
-    \centering \hexicon{#1}{#2} % Passes the color and icon to your updated hexicon
+  \begin{minipage}[c]{\hexcolw}
+    \centering \hexicon{#1}{#2}
   \end{minipage}%
-  \begin{minipage}[c]{\dimexpr\linewidth-1.0cm\relax}
-    {\Large\bfseries\color{cvDarkgray}\hspace{1.1ex}#3}\par
+  \begin{minipage}[c]{\dimexpr\linewidth-\hexcolw\relax}
+    {\Large\bfseries\color{cvDarkgray}\hspace{\hexgap}#3}\par
     \vspace{-1.6ex}
-    \color{#1!70}\rule{\linewidth}{1.5pt}% Uses the passed color at 70% opacity for the line
+    \color{#1!70}\rule{\linewidth}{1.5pt}
   \end{minipage}%
-  \par\vspace{1.5ex}
+  \par\nobreak\vspace{1.2ex}% No page break between a heading and its first entry
 }
 
 % Custom CV entry command
 \newcommand{\cventry}[5]{%
   \noindent
-  \begin{minipage}[t]{3.5cm}
+  \begin{minipage}[t]{3.3cm}
   \vspace{0pt}\textcolor{cvDarkgray}{\textbf{#1}}
   \end{minipage}%
-  \begin{minipage}[t]{\dimexpr\linewidth-3.5cm\relax}
+  \begin{minipage}[t]{\dimexpr\linewidth-3.3cm\relax}
   \vspace{0pt}\textbf{#2}\ifx&#3&\else, #3\fi\ifx&#4&\else, \textit{#4}\fi\par
-  \ifx&#5&\else \vspace{0.1cm} #5 \fi
-  \end{minipage}\par\vspace{0.4cm}
+  \ifx&#5&\else \vspace{0.08cm} #5 \fi
+  \end{minipage}\par\vspace{0.26cm}
 }
 
 % Custom CV item command
 \newcommand{\cvitem}[2]{%
   \noindent
-  \begin{minipage}[t]{3.5cm}
+  \begin{minipage}[t]{3.3cm}
   \vspace{0pt}\textcolor{cvDarkgray}{\textbf{#1}}
   \end{minipage}%
-  \begin{minipage}[t]{\dimexpr\linewidth-3.5cm\relax}
+  \begin{minipage}[t]{\dimexpr\linewidth-3.3cm\relax}
   \vspace{0pt}#2
-  \end{minipage}\par\vspace{0.2cm}
+  \end{minipage}\par\vspace{0.16cm}
 }
 
-% Remove page numbers
 % Header and Footer setup
 \pagestyle{fancy}
-\fancyhf{} % Clear all default headers and footers
-\renewcommand{\headrulewidth}{0pt} % Remove the default decorative line under the header
-\rhead{\textcolor{lightgray}{\small \today}} % Right-aligned header
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rhead{\textcolor{lightgray}{\small \today}}
 
 % Contact header: two columns, each an icon column beside a text column.
 % Usage: \contactcolumn{Width}{Icons}{Texts}, one row per icon, rows separated by \\[0.3cm]
@@ -103,16 +113,16 @@
 \newcommand{\contactcolumn}[3]{%
   \setlength{\contactw}{#1}%
   \begin{minipage}[t]{\contactw}%
-    \begin{minipage}[t]{1.2cm}#2\end{minipage}% <-- The percent sign prevents an accidental space token
-    \hspace{3pt}%
-    \begin{minipage}[t]{\dimexpr\contactw-1.2cm-3pt\relax}#3\end{minipage}%
+    \begin{minipage}[t]{\hexcolw}\centering#2\end{minipage}%
+    \hspace{\hexgap}%
+    \begin{minipage}[t]{\dimexpr\contactw-\hexcolw-\hexgap\relax}#3\end{minipage}%
   \end{minipage}%
 }
 
 % The public contact details. A private variant is built locally by defining \privatecontact as the
 % path of a file that redefines these macros (and fills the right-hand column); that file is never
 % part of this repository.
-\newcommand{\cvemail}{\url{oscar@anghammar.com}}
+\newcommand{\cvemail}{\href{mailto:oscar@anghammar.com}{\texttt{oscar@anghammar.com}}}
 \newcommand{\cvrighticons}{}
 \newcommand{\cvrighttexts}{}
 \ifdefined\privatecontact \input{\privatecontact}\fi
@@ -120,7 +130,7 @@
 \begin{document} % -----------------------------------------------------------------------------------------------------
 
 % Header Information
-  {\Huge\bfseries\textcolor{cvDarkgray}{Oscar Anghammar}}\\[0.5cm]
+  \noindent{\Huge\bfseries\textcolor{cvDarkgray}{Oscar Anghammar}}\\[0.45cm]
   \noindent
   \contactcolumn{0.45\linewidth}{%
     \hexicon{cvDarkgray}{\faEnvelope}\\[0.3cm]
@@ -135,139 +145,140 @@
     Org.\ no.\ 559509-3542%
   }%
   \contactcolumn{0.55\linewidth}{\cvrighticons}{\cvrighttexts}%
-  \par\vspace{0.5cm}
+  \par\vspace{0.3cm}
 
-  \cvsection{cvPurple}{\Large\textbf{$\genfrac{}{}{0pt}{2.0pt}{\text{TL;}}{\text{DR}}$}}{Summary}
-  \noindent Mathematician and software engineer with a Master's degree in pure mathematics
-  and eight years in fintech, building probability models and GPU-accelerated Monte Carlo simulations
-  for automated trading in production. Since 2026 running my own company, Anghammar konsult AB,
-  working on reinforcement learning, LLM-driven development workflows and serverless mobile apps.
-  \vspace{0.5cm}
+  \cvsection{cvPurple}{\large\textbf{$\genfrac{}{}{0pt}{2.0pt}{\text{TL;}}{\text{DR}}$}}{Summary}
+  \noindent Software engineer with a Master's degree in mathematics and nine years of professional experience
+  in fintech, integrating mathematics with production code. My past work includes designing asset allocation
+  algorithms, end-to-end probability models for automated trading, and calibration algorithms together with
+  live market data pipelines for automatic model parameter updates. Since 2026 running my own company,
+  Anghammar konsult AB, working on reinforcement learning, LLM agents, local AI deployment and
+  serverless mobile apps.
+  \vspace{0.15cm}
 
   \cvsection{cvMidnight}{\faBriefcase}{Experience}
-  \cventry{2026--}{Founder / Consultant}{Anghammar konsult AB}{Stockholm}{
-    Independent software development and consulting, working with LLM coding agents.
-    Own projects: Robostrat, KnotNet, Wiki Harness Racing and Pröjsa (see Projects).
+  \cventry{2026--}{Founder / Software Engineer}{Anghammar konsult AB}{Stockholm}{
+    Software development and consulting; see Projects for my recent work.
   }
   \cventry{2018--2026}{Mathematician / Software Engineer}{Likeligood AB}{Stockholm}{
-    Fintech company developing a robot for semi-automated trading, mainly in sports betting.
-    \begin{itemize}\setlength{\itemsep}{1pt}
-      \item \textbf{Built end-to-end probability models} for live soccer betting, from data scraping
-        and cleansing to modeling, testing, live calibration and analysis of model performance.
-      \item \textbf{Generalized the modeling framework} to more sports: laid the foundation for
-        basketball and integrated the existing tennis model.
+    Fintech startup (4--5 developers) developing a robot for semi-automated trading, mainly in sports betting.
+    I was with the company from its start until it ceased operations.
+    \begin{itemize}[topsep=3pt, partopsep=0pt, itemsep=1pt, parsep=0pt]
+      \item \textbf{Built end-to-end probability models} for live soccer betting, from scraping data on thousands
+        of matches to modeling, testing and performance analysis: Markov chains calibrated live against market
+        data with an Unscented Kalman Filter, implemented as Monte Carlo simulations on the GPU in GLSL and
+        Vulkan.
+      \item \textbf{Generalized the modeling framework} into an API designed to fit most sports.
       \item \textbf{Designed and deployed} an automated cryptocurrency trading robot.
-      \item \textbf{Ran live operations}: software upgrades, fixing malfunctions during live trading,
-        and technical contact for the system operators. Contributed to the UI by designing the parts
-        for controlling and monitoring live data filtering and model parameters.
+      \item \textbf{Integrated our solution into a partner's codebase} in a joint venture project with a major
+        sports data provider, working closely with their engineers.
+      \item \textbf{Ran live operations} on our Linux servers: technical contact for the system operators, and
+        debugging live failures from server logs.
+      \item \textbf{Contributed to the UI} by designing the parts for controlling and monitoring live data
+        filtering and model parameters.
       \item \textbf{Led the recruitment and onboarding} of a junior engineer.
     \end{itemize}
-    \textbf{Technologies:} Markov chain models via GPU-accelerated Monte Carlo simulation;
-    Scala and MATLAB, alongside TypeScript and GLSL; Circe, Pekko, Apache Commons Math and protobuf.
+    \textbf{Technologies:} Scala (main production language), MATLAB, JavaScript, GLSL, Circe,
+    Apache Commons Math and Protobuf.
   }
   \cventry{2017--2018}{Mathematician}{Pentech Ltd}{Remote}{
     Developed and implemented asset allocation algorithms for pension funds.
     Analyzed financial data and built prototypes in MATLAB, with production implementation in C\#.
   }
   \cventry{2011--2017}{Teaching Assistant}{Chalmers University of Technology}{Gothenburg}{
-    Led exercise sessions for undergraduate courses, mainly in calculus and linear algebra.
-    Instructed MATLAB-based computer exercises,
-    and mentored students in the ``Sommarmatte'' preparatory mathematics course.
+    Led exercise sessions for undergraduate courses, mainly in calculus and linear algebra, and MATLAB
+    computer exercises; mentored students in a preparatory mathematics course.
   }
+
+  \cvsection{cvIndigo}{\LARGE$\mathbb{R}$}{Technical Proficiencies}
+  \cvitem{Generative AI}{
+    Tool-using LLM agents (MCP); agentic development (Claude Code, Antigravity); self-hosted LLM/VLM
+    serving (llama.cpp) behind Cloudflare; image generation (ComfyUI).
+  }
+  \cvitem{ML}{
+    Self-play reinforcement learning (PPO) with PyTorch on ROCm; ONNX in the browser.
+  }
+  \cvitem{Mathematics}{
+    Strong foundation in probability modeling, including Markov chains, Monte Carlo simulation and Kalman
+    filtering. Extensive academic background in linear and multilinear algebra, abstract algebra, real and
+    complex analysis, and topology.
+  }
+  \cvitem{Tools, OS}{Git, IntelliJ, SBT, \LaTeX; Windows, macOS and Linux, all three in regular use.}
 
   \cvsection{cvGreen}{\faEdit}{Projects}
   \cvitem{Robostrat}{
     A turn-based strategy game developed alongside its own AI, as a testbed for an AI training workflow
-    intended to carry over to other turn-based strategy games. The bot is trained by self-play reinforcement learning
-    (PyTorch on ROCm) and plays in the browser via ONNX.
-    Language models do engineering work in the workflow and play against the bot as scouts.
-    \\[0.1cm]
+    intended to carry over to other turn-based strategy games. The bot is trained by self-play reinforcement
+    learning (PyTorch on ROCm, about a thousand games at a time) and plays in the browser via ONNX.
+    For efficient training, the rules first ran as a PyTorch copy on the GPU, and have since been migrated to a Rust core.
+    The training engine is kept in step with the browser's TypeScript engine by differential fuzzing.
+    Language-model scouts (mostly Gemini) play the bot through an MCP server and report the weaknesses they find. 
+    Their view of the board is text that does the hex geometry for them (reach, supply lines, attacks priced by playing them out),
+    leaving the strategy to the model.
+    \\[0.06cm]
     \url{https://anghammar.com/robostrat/}
   }
-  \cvitem{KnotNet}{
-    An experimental serverless messaging app for iOS and Android, in public beta. Phones sync posts and messages
-    directly over Bluetooth LE and relay them for each other (store-and-forward), with no servers and no internet.
-    Native apps in Swift and Kotlin, a gossip sync protocol with signed identities and end-to-end encrypted DMs,
-    and a hardware-in-the-loop test harness that drives real phones over USB.
-    \\[0.1cm]
-    \url{https://anghammar.com/knotnet/}
-  }
   \cvitem{Wiki Harness\\Racing}{
-    A zero-backend, browser-based benchmarking harness for local LLMs,
-    running automated Wikiraces with real-time speed metrics, mistakes tracking, and path comparison visualizations.
-    \\[0.1cm]
+    A zero-backend browser harness that benchmarks LLMs as tool-using agents on automated Wikiraces:
+    self-correction from tool-call errors, loop detection and live speed metrics. It runs against any
+    OpenAI-compatible endpoint, such as a local llama.cpp server; the public demo uses an LLM hosted on my
+    own server.
+    \\[0.06cm]
     \url{https://harness.anghammar.com}
   }
   \cvitem{Pröjsa}{
-    A web app for splitting the restaurant bill. The user's own AI assistant (Gemini, Claude or ChatGPT,
-    set up once with Pröjsa's instructions) reads the photo of the receipt and returns a link; everyone at the table
-    taps what they had and pays their share with Swish, amount filled in.
-    Pröjsa never sees the receipt image, has no accounts and no tracking, and keeps a split for at most a week.
-    \\[0.1cm]
+    Splits restaurant bills with the user's own AI assistant (Gemini, Claude or ChatGPT), which
+    turns the receipt into a link; everyone taps their items and pays with Swish. Privacy by design:
+    Pröjsa never sees images and has no accounts or tracking.
+    \\[0.06cm]
     \url{https://projsa.anghammar.com}
+  }
+  \cvitem{KnotNet}{
+    An experimental serverless messaging app for iOS and Android, in public beta. Phones sync posts and
+    messages directly over Bluetooth LE and relay them for each other (store-and-forward), with no servers
+    and no internet. Native apps in Swift and Kotlin, with a gossip sync protocol, signed identities and
+    end-to-end encrypted DMs. Developed and tested with a hardware-in-the-loop harness that drives real
+    phones over USB.
+    \\[0.06cm]
+    \url{https://anghammar.com/knotnet/}
   }
 
   \cvsection{cvBurgundy}{\faCode}{Programming}
-  \cvitem{Scala}{\textbf{Professional experience.}
-    Eight years of professional experience in a mixed functional and object-oriented style,
-    operating independently of overarching frameworks. Currently my preferred programming language.
+  \cvitem{Scala}{\textbf{Production systems.}
+    Eight years as my main language at Likeligood, in a mixed functional and object-oriented style.
+    Currently my preferred programming language.
   }
-  \cvitem{MATLAB}{\textbf{Professional experience.}
-    Used extensively since 2011, primarily for numerical tasks and linear algebra.
-    Former preferred language prior to transitioning to Scala.
+  \cvitem{Python}{\textbf{ML and generative AI.}
+    Robostrat's training pipeline (PyTorch), test suite and MCP server; custom and patched ComfyUI nodes
+    for AMD GPUs; everyday scripting.
   }
-  \cvitem{C\#}{\textbf{Prior professional experience.}
-    Ten months of professional experience developing production algorithms at Pentech.
+  \cvitem{TypeScript/\\JavaScript}{\textbf{Web apps.}
+    Data scrapers and UI fixes at Likeligood; Robostrat's game engine and browser client, and Wiki
+    Harness Racing.
   }
-  \cvitem{Java}{\textbf{Working knowledge.}
-    Strong familiarity with the JVM and integrating Java libraries within Scala applications.
-    Academic background combined with practical experience debugging enterprise Java codebases at Likeligood.
+  \cvitem{Java}{\textbf{The JVM ecosystem.}
+    Integrating Java libraries into Scala code and debugging enterprise Java codebases at Likeligood.
+    I also read Kotlin, which is close to Scala.
   }
-  \cvitem{TypeScript}{\textbf{Working knowledge.}
-    Maintained data scrapers and fixed UI bugs in an existing JavaScript frontend at Likeligood.
-    Robostrat's game engine and browser client are TypeScript, written with coding agents.
+  \cvitem{MATLAB}{\textbf{Numerical computing.}
+    Used extensively since 2011 (university, Pentech, Likeligood), mainly numerical work and linear
+    algebra. My preferred language before Scala.
   }
-  \cvitem{Python}{\textbf{Working knowledge.}
-    Worked in existing codebases, including local branches of open-source generative AI projects.
-    Robostrat's reinforcement learning stack (PyTorch) is Python, written with coding agents.
+  \cvitem{C\#}{\textbf{Production algorithms.}
+    Ten months implementing asset allocation algorithms in production at Pentech.
   }
-  \cvitem{Kotlin, Swift}{\textbf{With coding agents.}
-    KnotNet's native Android (Kotlin, Jetpack Compose) and iOS (Swift, SwiftUI) apps are written with
-    coding agents. Kotlin reads naturally coming from Scala.
-  }
-
-  \cvsection{cvIndigo}{\LARGE$\mathbb{R}$}{Technical Proficiencies}
-  \cvitem{Mathematics}{
-    Strong foundation in probability modeling, including Markov chains, Monte Carlo simulations, and Kalman filtering.
-    Extensive academic background in linear/multilinear algebra, abstract algebra, real/complex analysis, and topology.
-  }
-  \cvitem{AI/ML}{
-    Reinforcement learning (PPO self-play) with PyTorch on ROCm, from training to measuring model strength;
-    ONNX export for in-browser inference; local LLM and VLM deployment (llama.cpp) and LLM agents with tool use (MCP).
-  }
-  \cvitem{OS}{Windows, macOS, Linux}
-  \cvitem{Tools}{Git, IntelliJ, SBT, \LaTeX, Claude Code, llama.cpp, ComfyUI}
-  \cvitem{Languages}{Swedish (first language), English (proficient)}
-  \cvitem{Other merits}{Driving license B}
 
   \cvsection{cvBlue}{\faGraduationCap}{Education}
   \cvitem{2015--2017}{Various university courses; mainly graduate-level courses in mathematics.}
-  \cventry{2013--2015}{Degree of Master of Science with a major in Mathematics}{}{}{
-    University of Gothenburg
-  }
-  \cventry{2010--2013}{Degree of Bachelor of Science with a major in Mathematics}{}{}{
-    University of Gothenburg
-  }
-
-  \cvsection{cvBronze}{\textbf{G\hspace{-1.0pt}r}\small\hspace{-1.7pt}$_k$}{Master's Thesis}
-  \cvitem{Title}{\emph{de Rham Cohomology for Grassmann and Flag Manifolds}}
-  \cvitem{Supervisor}{Genkai Zhang}
-  \cvitem{Description}{
-    This thesis studies both singular- and de Rham cohomologies for the Grassmannian,
-    and compares these two constructions. It also briefly explores Schubert calculus
+  \cventry{2013--2015}{Master of Science in Mathematics}{University of Gothenburg}{}{
+    \textbf{Master's Thesis:} \emph{de Rham Cohomology for Grassmann and Flag Manifolds} (Supervisor: Genkai Zhang).
+    Studies singular and de Rham cohomologies for the Grassmannian, exploring Schubert calculus
     and a possible generalization of Horn's conjecture.
   }
+  \cventry{2010--2013}{Bachelor of Science in Mathematics}{University of Gothenburg}{}{}
 
-
+  \cvsection{cvBronze}{\faInfo}{Other}
+  \cvitem{Languages}{Swedish (native), English (fluent).}
+  \cvitem{Driving license}{B (car).}
 
 \end{document} % -------------------------------------------------------------------------------------------------------

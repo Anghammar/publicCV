@@ -163,23 +163,23 @@
   \cventry{2018--2026}{Mathematician / Software Engineer}{Likeligood AB}{Stockholm}{
     Fintech startup (4--5 developers) developing a robot for semi-automated trading, mainly in sports betting.
     I was with the company from its start until it ceased operations.
-    \begin{itemize}[topsep=3pt, partopsep=0pt, itemsep=1pt, parsep=0pt]
+    \begin{itemize}[topsep=3pt, partopsep=0pt, itemsep=0pt, parsep=0pt]
       \item \textbf{Built end-to-end probability models} for live soccer betting, from scraping data on thousands
-        of matches to modeling, testing and performance analysis: Markov chains calibrated live against market
-        data with an Unscented Kalman Filter, implemented as Monte Carlo simulations on the GPU in GLSL and
-        Vulkan.
+        of matches to modeling, testing and performance analysis in production: Markov chains calibrated live
+        against market data with an Unscented Kalman Filter, implemented as Monte Carlo simulations on the
+        GPU in GLSL and Vulkan.
+      \item \textbf{Integrated the models into the backtesting system}, and used it to test model
+        configurations against stored market data and sports events.
+      \item \textbf{Ran live operations} on our Linux servers: regular system deployments, technical contact
+        for the system operators, and debugging live failures from server logs.
       \item \textbf{Generalized the modeling framework} into an API designed to fit most sports.
       \item \textbf{Designed and deployed} an automated cryptocurrency trading robot.
-      \item \textbf{Integrated our solution into a partner's codebase} in a joint venture project with a major
+      \item \textbf{Embedded our solution in a partner's codebase} in a joint venture project with a major
         sports data provider, working closely with their engineers.
-      \item \textbf{Ran live operations} on our Linux servers: technical contact for the system operators, and
-        debugging live failures from server logs.
-      \item \textbf{Contributed to the UI} by designing the parts for controlling and monitoring live data
-        filtering and model parameters.
+      \item \textbf{Contributed to the UI}: controls for live data filtering and model parameters.
       \item \textbf{Led the recruitment and onboarding} of a junior engineer.
     \end{itemize}
-    \textbf{Technologies:} Scala (main production language), MATLAB, JavaScript, GLSL, Circe,
-    Apache Commons Math and Protobuf.
+    \textbf{Technologies:} Scala, MATLAB, JavaScript, GLSL, Apache Commons Math, Protobuf.
   }
   \cventry{2017--2018}{Mathematician}{Pentech Ltd}{Remote}{
     Developed and implemented asset allocation algorithms for pension funds.
@@ -199,8 +199,8 @@
     Self-play reinforcement learning (PPO) with PyTorch on ROCm; ONNX in the browser.
   }
   \cvitem{Mathematics}{
-    Strong foundation in probability modeling, including Markov chains, Monte Carlo simulation and Kalman
-    filtering. Extensive academic background in linear and multilinear algebra, abstract algebra, real and
+    Strong foundation in probability and time series modeling, including Markov chains, Monte Carlo
+    simulation and Kalman filtering. Extensive academic background in linear and multilinear algebra, abstract algebra, real and
     complex analysis, and topology.
   }
   \cvitem{Tools, OS}{Git, IntelliJ, SBT, \LaTeX; Windows, macOS and Linux, all three in regular use.}
@@ -211,8 +211,8 @@
     intended to carry over to other turn-based strategy games. The bot is trained by self-play reinforcement
     learning (PyTorch on ROCm, about a thousand games at a time) and plays in the browser via ONNX.
     For efficient training, the rules first ran as a PyTorch copy on the GPU, and have since been migrated to a Rust core.
-    The training engine is kept in step with the browser's TypeScript engine by differential fuzzing.
-    Language-model scouts (mostly Gemini) play the bot through an MCP server and report the weaknesses they find. 
+    Training calls that core from Python and the browser runs it as WebAssembly, so the bot plays by exactly the rules it was trained on.
+    Language-model scouts (mostly Gemini) play the bot through an MCP server and report the weaknesses they find.
     Their view of the board is text that does the hex geometry for them (reach, supply lines, attacks priced by playing them out),
     leaving the strategy to the model.
     \\[0.06cm]
@@ -253,8 +253,7 @@
     for AMD GPUs; everyday scripting.
   }
   \cvitem{TypeScript/\\JavaScript}{\textbf{Web apps.}
-    Data scrapers and UI fixes at Likeligood; Robostrat's game engine and browser client, and Wiki
-    Harness Racing.
+    Data scrapers and UI fixes at Likeligood; Robostrat's browser client, and Wiki Harness Racing.
   }
   \cvitem{Java}{\textbf{The JVM ecosystem.}
     Integrating Java libraries into Scala code and debugging enterprise Java codebases at Likeligood.

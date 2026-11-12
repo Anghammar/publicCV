@@ -1,0 +1,130 @@
+% The template shared by every CV: packages, colors, the \cvsection, \cventry and \cvitem commands,
+% the header and the contact details. A CV loads it right after its \documentclass line with
+% \input{cvtemplate}; the tailored CVs (kept outside this repository) load this same file.
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% headsep keeps the date in the header close to the name, well clear of the page edge
+\usepackage[left=2.0cm, right=2.0cm, top=1.9cm, bottom=1.6cm, headsep=0.5cm]{geometry}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usepackage{xparse}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+\usepackage[style=iso]{datetime2}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref} % clickable links; load last
+
+\setlength{\headheight}{13.6pt}
+
+\usetikzlibrary{shapes.geometric}
+
+\renewcommand{\familydefault}{\rmdefault}
+
+% Product names are never split across lines
+\hyphenation{Antigravity ComfyUI ChatGPT Likeligood Robostrat Pentech}
+
+% Define a custom command for the hexagonal icon
+\newcommand{\hexicon}[2]{%
+  \smash{% Tells LaTeX to ignore the vertical height of the icon
+    \begin{tikzpicture}[baseline={([yshift=-0.6ex]char.center)}]
+    \node[
+      draw=#1,
+      fill=white,
+      shape=regular polygon,
+      regular polygon sides=6,
+      inner sep=-1.0pt,
+      minimum size=0.75cm,
+      line width=1.4pt
+    ] (char) {\color{#1}\normalsize#2};
+    \end{tikzpicture}%
+  }%
+}
+
+\definecolor{cvDarkgray}{gray}{0.2}    % Define colors for the classic grey theme
+
+\definecolor{cvGreen}{HTML}{006400}    % Dark Green
+\definecolor{cvBlue}{HTML}{1A5276}     % Steel Blue: Strong, corporate, and clean.
+\definecolor{cvTeal}{HTML}{0E6251}     % Deep Sea: Modern, sophisticated, and easy on the eyes.
+\definecolor{cvMidnight}{HTML}{212F3D} % Midnight Blue: Very dark, looks almost black until compared.
+
+\definecolor{cvPurple}{HTML}{4A235A}   % Royal Plum: Excellent contrast with cvDarkgray text.
+\definecolor{cvBurgundy}{HTML}{641E16} % Oxblood: Serious and authoritative, prints very well.
+\definecolor{cvIndigo}{HTML}{283593}   % Academic Indigo: Slightly more vibrant than Steel Blue.
+\definecolor{cvBronze}{HTML}{784212}   % Burned Umber: Distinctive, warm, and professional.
+
+% Every hexagon sits centered in a column of \hexcolw, and its text starts \hexgap after that column,
+% so the contact rows line up with the section headings.
+\newlength{\hexcolw}\setlength{\hexcolw}{1.0cm}
+\newlength{\hexgap}\setlength{\hexgap}{0.24cm}
+
+% Custom CV Section Command
+% Usage: \cvsection{Color}{Icon}{Title}
+\NewDocumentCommand{\cvsection}{ m m m }{%
+  \par% The \nobreak below keeps a heading on the same page as its first entry
+  \vspace{2.2ex}
+  \noindent
+  \begin{minipage}[c]{\hexcolw}
+    \centering \hexicon{#1}{#2}
+  \end{minipage}%
+  \begin{minipage}[c]{\dimexpr\linewidth-\hexcolw\relax}
+    {\Large\bfseries\color{cvDarkgray}\hspace{\hexgap}#3}\par
+    \vspace{-1.6ex}
+    \color{#1!70}\rule{\linewidth}{1.5pt}
+  \end{minipage}%
+  \par\nobreak\vspace{1.2ex}% No page break between a heading and its first entry
+}
+
+% Custom CV entry command
+\newcommand{\cventry}[5]{%
+  \noindent
+  \begin{minipage}[t]{3.3cm}
+  \vspace{0pt}\textcolor{cvDarkgray}{\textbf{#1}}
+  \end{minipage}%
+  \begin{minipage}[t]{\dimexpr\linewidth-3.3cm\relax}
+  \vspace{0pt}\textbf{#2}\ifx&#3&\else, #3\fi\ifx&#4&\else, \textit{#4}\fi\par
+  \ifx&#5&\else \vspace{0.08cm} #5 \fi
+  \end{minipage}\par\vspace{0.26cm}
+}
+
+% Custom CV item command
+\newcommand{\cvitem}[2]{%
+  \noindent
+  \begin{minipage}[t]{3.3cm}
+  \vspace{0pt}\textcolor{cvDarkgray}{\textbf{#1}}
+  \end{minipage}%
+  \begin{minipage}[t]{\dimexpr\linewidth-3.3cm\relax}
+  \vspace{0pt}#2
+  \end{minipage}\par\vspace{0.16cm}
+}
+
+% Header and Footer setup
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\rhead{\textcolor{lightgray}{\small \today}}
+
+% Contact header: two columns, each an icon column beside a text column.
+% Usage: \contactcolumn{Width}{Icons}{Texts}, one row per icon, rows separated by \\[0.3cm]
+% The width is fixed in \contactw first: inside the outer minipage \linewidth is already the column's.
+\newlength{\contactw}
+\newcommand{\contactcolumn}[3]{%
+  \setlength{\contactw}{#1}%
+  \begin{minipage}[t]{\contactw}%
+    \begin{minipage}[t]{\hexcolw}\centering#2\end{minipage}%
+    \hspace{\hexgap}%
+    \begin{minipage}[t]{\dimexpr\contactw-\hexcolw-\hexgap\relax}#3\end{minipage}%
+  \end{minipage}%
+}
+
+% The public contact details. A private variant is built locally by defining \privatecontact as the
+% path of a file that redefines these macros (and fills the right-hand column); that file is never
+% part of this repository.
+\newcommand{\cvemail}{\href{mailto:oscar@anghammar.com}{\texttt{oscar@anghammar.com}}}
+\newcommand{\cvrighticons}{}
+\newcommand{\cvrighttexts}{}
+\ifdefined\privatecontact \input{\privatecontact}\fi

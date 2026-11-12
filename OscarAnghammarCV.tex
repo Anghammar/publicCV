@@ -40,8 +40,8 @@
     \begin{itemize}[topsep=3pt, partopsep=0pt, itemsep=0pt, parsep=0pt]
       \item \textbf{Built end-to-end probability models} for live soccer betting, from scraping data on thousands
         of matches to modeling, testing and performance analysis in production: Markov chains calibrated live
-        against market data with an Unscented Kalman Filter, implemented as Monte Carlo simulations on the
-        GPU in GLSL and Vulkan.
+        to market data with Kalman-like filters (one an Unscented Kalman Filter), run as GPU Monte Carlo
+        simulations (GLSL, Vulkan).
       \item \textbf{Integrated the models into the backtesting system}, and used it to test model
         configurations against stored market data and sports events.
       \item \textbf{Ran live operations} on our Linux servers: regular system deployments, technical contact
